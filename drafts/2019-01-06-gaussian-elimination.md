@@ -6,6 +6,10 @@ author: holocircuit
 tags:   ctf cryptography
 ---
 
+<script type="text/javascript" async 
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?
+config=TeX-AMS-MML_HTMLorMML"></script>
+
 In this series of posts, we'll go through how to solve [Unofficial](https://ctftime.org/task/7416), a cryptography challenge from 35C3 CTF. 
 
 The first couple of posts are just going to be a bit of background about linear algebra - go [to Post 3][post3] if you just want the challenge solution.
