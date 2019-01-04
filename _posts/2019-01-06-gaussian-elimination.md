@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "\"Unofficial\" - 35C3 CTF (Part 1 - Linear Equations)"
-date:   2019-01-03 21:33:51 +0000
+date:   2019-01-06 00:00:00 +0000
 author: holocircuit
 tags:   ctf cryptography
 ---
