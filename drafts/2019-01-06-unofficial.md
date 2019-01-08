@@ -48,7 +48,7 @@ if __name__ == '__main__':
     print(binascii.hexlify(cipher.encrypt(flag)).decode('utf-8'))
 ```
 
-Writing this down in symbols, the server has a key $$(k_1, ..., k_{40})$$ of 128-bit values (which is a private), and a value $$p$$, which is 134 bits long.
+Writing this down in symbols, the server has a key $$(k_1, ..., k_{40})$$ of 128-bit values (which is private), and a value $$p$$, which is 134 bits long.
 
 It issues a _challenge_ $$(r_1, ..., r_{40})$$ of 128-bit values, and expects a response given by $$\sum (k_i * r_i \mod p)$$.
 
@@ -56,13 +56,13 @@ If the response is correct, it gives us the flag, AES-CFB encrypted with the SHA
 
 We can extract out the streams from the PCAP file using `tcpflow -r surveillance.pcap`. The PCAP file contains 40 challenge/response pairs: 39 of them are valid, one isn't.
 
-It turns out $$p$$ isn't prime - it's a square with a bunch of small factors. See [FactorDB](http://factordb.com/index.php?query=21652247421304131782679331804390761485569) for the full factorisation - it turns out it won't be that important for the challenge.
+If we try and factorise $$p$$ we'll see it isn't prime - it's a square with a bunch of small factors. See [FactorDB](http://factordb.com/index.php?query=21652247421304131782679331804390761485569) for the full factorisation - it turns out it won't be that important for the challenge.
 
-# Part 1: Solving some simultaeneous equations
-Using the 39 valid solutions, we can write down some linear simultaeneous equations for the key, modulo p. Each valid response gives us an equation for the key, given by
+# Part 1: Solving some simultaneous equations
+Using the 39 valid solutions, we can write down some linear simultaneous equations for the key, modulo p. Each valid response gives us an equation for the key, given by
 
 $$
-r_1k_1 + ... + r_nk_n = S
+r_1k_1 + ... + r_nk_n = S \mod p
 $$
 
 where $$(r_1, ..., r_n)$$ is the challenge and $$S$$ is the correct response value.
@@ -80,7 +80,7 @@ $$
 
 where we know $$a_i$$ and $$b_i$$, and $$X$$ can take any value $$\mod p$$. Different values of $$X$$ will give different solutions.
 
-One thing that complicates this slightly is that $$p$$ isn't prime - and Gaussian elimination is only guaranteed to work for prime values. It turns out that in the example we have here, Gaussian elimination still works, so we still get a family of solutions in the above form.
+One thing that complicates this slightly is that $$p$$ isn't prime - and Gaussian elimination is only guaranteed to work for prime values. Luckily in the example we have here, Gaussian elimination still works, so we still get a family of solutions in the above form.
 
 Code to do the Gaussian elimination is below. You'll need to extract out the PCAP file into the `data/` folder first.
 ```python
@@ -228,7 +228,12 @@ Now, LLL is an algorithm which takes in a basis for a lattice, and tries to find
 
 For example, if we give LLL the second basis above, it'll try and produce something that looks more like the first one - because the vectors in the first example are smaller.
 
-Why do we care for cryptography? It turns out that we can often express a given problem in terms of a lattice, and describe what we're trying to find as a vector in that lattice. If the vector we're looking for is _"small"_, then LLL might be able to find it for us.
+How does this matter for cryptography? With a bit of imagination, we can use this as a problem-solving technique. Let's suppose we're trying to find some secret value. If we can:
+- come up with some lattice
+- prove that value is in the lattice
+- prove that value is "small" compared to the lattice
+
+then we might be able to use LLL to find it! Let's see an example.
 
 ## Part 2b: Using LLL 
 So to summarise, from Part 1, we have integers $$(a_1, ... a_{40}), (b_1, ..., b_{40})$$, and we want to find an integer $$X$$ such that 
