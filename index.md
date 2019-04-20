@@ -6,7 +6,7 @@ layout: default
 ---
 
 # About
-Member of [@tq2ctf](https://tq2c.tf).
+Member of [@the cr0wn](https://cr0wn.uk).
 I studied mathematics, and mainly focus on cryptography challenges.
 
 Theme from [Github Pages](https://github.com/pages-themes/hacker).
